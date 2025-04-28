@@ -9,7 +9,7 @@ services:
       - DB_PASSWORD=MyStrongPass4@DB
       - DB_DATABASE=rsvp_db
     depends_on:
-      - db-mysql
+      - birthday-db
     volumes:
       - .:/app
     networks:
