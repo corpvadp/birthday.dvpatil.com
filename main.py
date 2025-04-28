@@ -21,7 +21,7 @@ templates = Jinja2Templates(directory="templates")
 
 # Database configuration
 db_config = {
-    "host": "10.0.0.22",#os.getenv("DB_HOST"),
+    "host": os.getenv("DB_HOST"),
     "port": os.getenv("DB_PORT"),
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
