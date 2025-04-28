@@ -1,5 +1,5 @@
 services:
-  web:
+  bday:
     build: .
     ports:
       - 44018:44018
