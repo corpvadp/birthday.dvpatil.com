@@ -8,6 +8,8 @@ services:
       - DB_USER=dp
       - DB_PASSWORD=MyStrongPass4@DB
       - DB_DATABASE=rsvp_db
+    depends_on:
+      - mysql
     volumes:
       - .:/app
     networks:
@@ -15,6 +17,6 @@ services:
       - nginxproxymanager_default
 networks:
   bday_app_network:
-    driver: bridge
+    external: true
   nginxproxymanager_default:
     external: true
