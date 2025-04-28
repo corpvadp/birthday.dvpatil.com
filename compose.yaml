@@ -1,6 +1,7 @@
 services:
   bday:
     build: .
+    container_name: bday-app
     ports:
       - 44018:44018
     environment:
