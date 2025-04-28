@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    ports:
+      - 44018:44018
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=dp
+      - DB_PASSWORD=MyStrongPass4@DB
+      - DB_DATABASE=rsvp_db
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+    networks:
+      - bday_app_network
+volumes:
+  mysql_data_2: null
+networks:
+  bday_app_network:
+    driver: bridge
+  nginxproxymanager_default:
+    external: true

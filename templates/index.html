@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday RSVP - May 2nd</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .button-transition {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .button-transition:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .guest-names-container {
+            display: none;
+        }
+        
+        .address-link {
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .address-link:hover {
+            color: #4f46e5;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto glass-effect rounded-lg shadow-xl overflow-hidden">
+            <div class="p-8 text-center">
+                <h1 class="title-font text-5xl font-bold mb-4 text-gray-800">Birthday Celebration 🎉</h1>
+                <p class="text-2xl mb-2 text-gray-700">May 2nd, 2025</p>
+                <p class="text-2xl mb-2 text-gray-700">7:30 PM</p>
+                <p class="text-xl text-gray-700">Aurora Sausalito - Ristorante e Pizzeria</p>
+                <p class="text-xl text-gray-700 address-link" onclick="window.open('https://maps.app.goo.gl/NHXdHyrWMor8KVXV6', '_blank')">
+                    300 Valley St #207, Sausalito, CA 94965
+                </p>
+            </div>
+            
+            <div class="p-8">
+                <div class="mb-8 text-center">
+                    <h2 class="title-font text-3xl font-bold mb-4 text-gray-800">Dhairyashil Patil</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        It gives me great joy to invite you to the 3rd annual cake-cutting extravaganza atop none other than the Golden Gate Bridge and dinner at Aurora Sausalito! 🎂🌉<br><br>
+                        For the past two consecutive years, I've celebrated my birthday on the bridge, and it's officially a tradition I refuse to break. SF is close to my heart, and your presence would make the occasion even more special.
+                    </p>
+                </div>
+
+                <form id="rsvpForm" class="space-y-6">
+                    <div>
+                        <label for="guest_name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                        <input type="text" id="guest_name" name="guest_name" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Will you attend?</label>
+                        <div class="mt-2 space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="response" value="yes" required
+                                    class="form-radio text-indigo-600">
+                                <span class="ml-2">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="response" value="no" required
+                                    class="form-radio text-indigo-600">
+                                <span class="ml-2">No</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" id="addMoreGuestsBtn"
+                            class="button-transition w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Add More Guests 🎈
+                        </button>
+                    </div>
+
+                    <div id="guestNamesContainer" class="guest-names-container space-y-4">
+                        <div class="guest-names-list space-y-4">
+                            <!-- Guest name fields will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <button type="submit"
+                            class="button-transition w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Submit RSVP 🎉
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="message" class="mt-4 text-center hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('addMoreGuestsBtn').addEventListener('click', () => {
+            const container = document.getElementById('guestNamesContainer');
+            container.style.display = 'block';
+            
+            const guestNamesList = container.querySelector('.guest-names-list');
+            const newGuestField = document.createElement('div');
+            newGuestField.className = 'guest-name-field';
+            newGuestField.innerHTML = `
+                <label class="block text-sm font-medium text-gray-700">Guest Name</label>
+                <div class="flex space-x-2">
+                    <input type="text" name="additional_guests[]" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <button type="button" class="remove-guest mt-1 px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">Remove</button>
+                </div>
+            `;
+            guestNamesList.appendChild(newGuestField);
+        });
+
+        document.getElementById('guestNamesContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-guest')) {
+                e.target.closest('.guest-name-field').remove();
+            }
+        });
+
+        document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            // Get all additional guest names
+            const additionalGuests = document.querySelectorAll('input[name="additional_guests[]"]');
+            additionalGuests.forEach(guest => {
+                if (guest.value.trim() !== '') {
+                    formData.append('additional_guests', guest.value);
+                }
+            });
+            
+            try {
+                const response = await fetch('/submit-rsvp', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                const messageDiv = document.getElementById('message');
+                messageDiv.textContent = result.message;
+                messageDiv.classList.remove('hidden');
+                messageDiv.classList.add('text-green-600');
+                
+                // Reset form
+                e.target.reset();
+                document.getElementById('guestNamesContainer').style.display = 'none';
+                document.querySelector('.guest-names-list').innerHTML = '';
+                
+            } catch (error) {
+                const messageDiv = document.getElementById('message');
+                messageDiv.textContent = 'An error occurred. Please try again.';
+                messageDiv.classList.remove('hidden');
+                messageDiv.classList.add('text-red-600');
+            }
+        });
+    </script>
+</body>
+</html> 
