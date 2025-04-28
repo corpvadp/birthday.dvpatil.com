@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP List - Birthday Celebration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto glass-effect rounded-lg shadow-xl overflow-hidden">
+            <div class="p-8 text-center">
+                <h1 class="title-font text-5xl font-bold mb-4 text-gray-800">RSVP List</h1>
+                <a href="/" class="inline-block mt-4 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                    Back to RSVP Form
+                </a>
+            </div>
+            
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h2 class="title-font text-3xl font-bold mb-4 text-gray-800">Attending ({{ attending_count }})</h2>
+                        <div class="space-y-2">
+                            {% for rsvp in attending %}
+                            <div class="p-4 bg-white rounded-lg shadow">
+                                <p class="font-semibold">{{ rsvp.guest_name }}</p>
+                                {% if rsvp.is_main_guest %}
+                                <span class="text-sm text-indigo-600">Main Guest</span>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h2 class="title-font text-3xl font-bold mb-4 text-gray-800">Not Attending ({{ not_attending_count }})</h2>
+                        <div class="space-y-2">
+                            {% for rsvp in not_attending %}
+                            <div class="p-4 bg-white rounded-lg shadow">
+                                <p class="font-semibold">{{ rsvp.guest_name }}</p>
+                                {% if rsvp.is_main_guest %}
+                                <span class="text-sm text-indigo-600">Main Guest</span>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
