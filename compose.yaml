@@ -13,10 +13,10 @@ services:
     volumes:
       - .:/app
     networks:
-      - bday_app_network
+      - bday-mysql_bday_app_network
       - nginxproxymanager_default
 networks:
-  bday_app_network:
+  bday-mysql_bday_app_network:
     external: true
   nginxproxymanager_default:
     external: true
