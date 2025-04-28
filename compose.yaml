@@ -12,6 +12,7 @@ services:
       - .:/app
     networks:
       - bday_app_network
+      - nginxproxymanager_default
 networks:
   bday_app_network:
     driver: bridge
