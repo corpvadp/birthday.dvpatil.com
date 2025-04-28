@@ -4,12 +4,12 @@ services:
     ports:
       - 44018:44018
     environment:
-      - DB_HOST=birthday-db-mysql-1
+      - DB_HOST=bday-mysql
       - DB_USER=dp
       - DB_PASSWORD=MyStrongPass4@DB
       - DB_DATABASE=rsvp_db
     depends_on:
-      - birthday-db
+      - bday-mysql
     volumes:
       - .:/app
     networks:
