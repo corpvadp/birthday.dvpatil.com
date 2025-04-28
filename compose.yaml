@@ -8,14 +8,10 @@ services:
       - DB_USER=dp
       - DB_PASSWORD=MyStrongPass4@DB
       - DB_DATABASE=rsvp_db
-    depends_on:
-      - mysql
     volumes:
       - .:/app
     networks:
       - bday_app_network
-volumes:
-  mysql_data_2: null
 networks:
   bday_app_network:
     driver: bridge
