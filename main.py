@@ -5,7 +5,8 @@ from fastapi.responses import HTMLResponse
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from typing import List
+from typing import List, Dict, Any
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -20,8 +21,8 @@ templates = Jinja2Templates(directory="templates")
 
 # Database configuration
 db_config = {
-    "host": os.getenv("DB_HOST"),
-    # "port": os.getenv("DB_PORT"),
+    "host": "10.0.0.22",#os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
     "database": os.getenv("DB_DATABASE")
@@ -95,6 +96,48 @@ async def submit_rsvp(
     finally:
         cursor.close()
         conn.close()
+
+def get_rsvps():
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        # Get all RSVPs
+        cursor.execute("""
+            SELECT guest_name, response, is_main_guest, created_at 
+            FROM rsvps 
+            ORDER BY created_at DESC
+        """)
+        rsvps = cursor.fetchall()
+        
+        # Separate attending and not attending
+        attending = [rsvp for rsvp in rsvps if rsvp['response'] == 'yes']
+        not_attending = [rsvp for rsvp in rsvps if rsvp['response'] == 'no']
+        
+        return {
+            'attending': attending,
+            'not_attending': not_attending,
+            'attending_count': len(attending),
+            'not_attending_count': len(not_attending)
+        }
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.get("/rsvp-list", response_class=HTMLResponse)
+async def rsvp_list(request: Request):
+    rsvps = get_rsvps()
+    return templates.TemplateResponse(
+        "rsvp_list.html",
+        {
+            "request": request,
+            "attending": rsvps['attending'],
+            "not_attending": rsvps['not_attending'],
+            "attending_count": rsvps['attending_count'],
+            "not_attending_count": rsvps['not_attending_count']
+        }
+    )
 
 if __name__ == "__main__":
     import uvicorn
