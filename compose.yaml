@@ -8,8 +8,8 @@ services:
       - DB_USER=dp
       - DB_PASSWORD=MyStrongPass4@DB
       - DB_DATABASE=rsvp_db
-    depends_on:
-      - bday-mysql
+    # depends_on:
+    #   - bday-mysql
     volumes:
       - .:/app
     networks:
