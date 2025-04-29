@@ -67,7 +67,7 @@ async def home(request: Request):
     )
 
 @app.post("/submit-rsvp")
-@limiter.limit("3/10minute")  # Limit to 3 requests per 10 minutes
+@limiter.limit("20/10minute")  # Limit to 3 requests per 10 minutes
 async def submit_rsvp(
     request: Request,
     guest_name: str = Form(...),
