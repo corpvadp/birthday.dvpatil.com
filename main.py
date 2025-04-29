@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
@@ -7,11 +7,18 @@ from dotenv import load_dotenv
 import os
 from typing import List, Dict, Any
 from datetime import datetime
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 # Load environment variables
 load_dotenv()
 
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -52,6 +59,7 @@ async def startup_event():
     init_db()
 
 @app.get("/", response_class=HTMLResponse)
+@limiter.limit("10/10minute")  # Limit to 3 requests per 10 minutes
 async def home(request: Request):
     return templates.TemplateResponse(
         "index.html",
@@ -59,6 +67,7 @@ async def home(request: Request):
     )
 
 @app.post("/submit-rsvp")
+@limiter.limit("3/10minute")  # Limit to 3 requests per 10 minutes
 async def submit_rsvp(
     request: Request,
     guest_name: str = Form(...),
@@ -126,6 +135,7 @@ def get_rsvps():
         conn.close()
 
 @app.get("/rsvp-list", response_class=HTMLResponse)
+@limiter.limit("3/10minute")  # Limit to 3 requests per 10 minutes
 async def rsvp_list(request: Request):
     rsvps = get_rsvps()
     return templates.TemplateResponse(
