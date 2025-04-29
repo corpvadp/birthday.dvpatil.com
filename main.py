@@ -59,7 +59,7 @@ async def startup_event():
     init_db()
 
 @app.get("/", response_class=HTMLResponse)
-@limiter.limit("10/10minute")  # Limit to 3 requests per 10 minutes
+@limiter.limit("100/10minute")  # Limit to 3 requests per 10 minutes
 async def home(request: Request):
     return templates.TemplateResponse(
         "index.html",
@@ -135,7 +135,7 @@ def get_rsvps():
         conn.close()
 
 @app.get("/rsvp-list", response_class=HTMLResponse)
-@limiter.limit("3/10minute")  # Limit to 3 requests per 10 minutes
+@limiter.limit("100/10minute")  # Limit to 3 requests per 10 minutes
 async def rsvp_list(request: Request):
     rsvps = get_rsvps()
     return templates.TemplateResponse(
